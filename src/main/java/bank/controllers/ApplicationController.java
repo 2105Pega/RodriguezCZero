@@ -1,13 +1,27 @@
 package bank.controllers;
 
+import java.util.List;
+
 import bank.models.Customer;
 import bank.views.ApplicationView;
 import diwhy.iHateScanner;
-/** Should probably, definitely make these singleton**/
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class ApplicationController {
-	ApplicationView view = new ApplicationView();
+	private static final Logger logr = LogManager.getLogger(ApplicationController.class);
+	//ApplicationView view = new ApplicationView();
     public static iHateScanner s = new iHateScanner();
-	public void newApplictionView(Customer custArg) {
-		view.newApplication(custArg);
+    public static void newApplicationView() {
+    	
+    }
+	public static void newApplicationView(List<Customer> customers) {
+		
+	}
+	public static void viewApplication(int customerID) {
+		
+	}
+	public static void updateIntialAmount(int applicationID, double newAmount) {
+		
 	}
 }

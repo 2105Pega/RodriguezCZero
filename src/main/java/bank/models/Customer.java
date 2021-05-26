@@ -32,6 +32,10 @@ public class Customer implements Serializable {
         this.username = usernameArg;
         this.password = passwordArg;
     }
+    public Customer(String usernameArg,String passwordArg) {
+        this.username = usernameArg;
+        this.password = passwordArg;
+    }
     public Customer(){
         super();
     }

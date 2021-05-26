@@ -27,6 +27,10 @@ public class Employee implements Serializable {
         this.name = nameArg;
         this.password = passwordArg;
     }
+    public Employee(String nameArg, String passwordArg) {
+    	this.username=nameArg;
+    	this.password=passwordArg;
+    }
     
     public int getId() {
         return id;

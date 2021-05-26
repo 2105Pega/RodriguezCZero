@@ -1,11 +1,19 @@
 package bank.models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.numbers.core.Precision;
+
 import diwhy.Serializer;
 
+/**
+ * 
+ * https://www.baeldung.com/java-round-decimal-number
+ *
+ */
 public class Transaction implements Serializable {
     private static ArrayList<Transaction> allTransactions = new ArrayList<>();
     public static void setAllTransactions(ArrayList<Transaction> allTransactions) {
@@ -17,18 +25,17 @@ public class Transaction implements Serializable {
     private int id;
     private int sourceAccountID;
     private int destinationAccountID;
-    private double amount;
-    private static final String file = "transactions.txt";
+    private BigDecimal amount;
     
     public Transaction(){
         super();
         this.id = uniqueId.getAndIncrement();
     }
-    public Transaction(int sourceArg, int destinationArg, double amountArg){
-        this.id = uniqueId.getAndIncrement();        
+    public Transaction(int id,int sourceArg, int destinationArg, BigDecimal amountArg){
+        this.id = id;        
         this.sourceAccountID = sourceArg;
         this.destinationAccountID = destinationArg;
-        this.amount = amountArg;
+        this.amount = amountArg.setScale(2 );
     }
     public int getId() {
         return id;
@@ -49,10 +56,11 @@ public class Transaction implements Serializable {
     public void setdestinationAccountID(int destinationAccountID) {
         this.destinationAccountID = destinationAccountID;
     }
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
-    public void setAmount(int amount) {
+    public void setAmount(BigDecimal amount) {
+    	amount = amount.setScale(2);
         this.amount = amount;
     }
     @Override

@@ -3,19 +3,27 @@ package bank.controllers;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import bank.Main;
+import bank.daos.CustomerImpl;
+import bank.daos.EmployeeImpl;
 import bank.models.Customer;
 import bank.models.Employee;
 import bank.views.LoginView;
 import diwhy.iHateScanner;
 
 public class LoginController {
-    private final String existingMessage = "That username already exists!";
-    private final String invalidPasswordMessage = "Oops, wrong password!";
+	private static final Logger logr = LogManager.getLogger(LoginController.class);
+    //private final String existingMessage = "That username already exists!";
+    //private final String invalidPasswordMessage = "Oops, wrong password!";
     //public static iHateScanner s = new iHateScanner();
     LoginView view = new LoginView();
+    EmployeeImpl emp = new EmployeeImpl();
+    CustomerImpl cust = new CustomerImpl();
     public void getLogin(){
         String[] login =  view.getLoginForm();
         if (login[0].equals("!")){
@@ -27,70 +35,47 @@ public class LoginController {
             return;
         }
         login(login[0], login[1]);
+        return;
     }
     private void employeeLogin() {
         String[] login = view.getEmployeeForm();
         String userArg = login[0];
         String passArg = login[1];
-        ArrayList<Employee> employees = Employee.getEmployees();
-        Stream<Employee> employeeStream = employees.stream();
         try {
-            Employee sessionEmployee = employeeStream.filter((e)-> e.getName().equals(userArg)).findFirst().get();
-            String employeePassword = sessionEmployee.getPassword();
-            if(String.valueOf(passArg).equals(employeePassword)){
-                Main.setSession("emp");
-                Main.setUserID(sessionEmployee.getId());
+        	boolean loginBool = emp.tryLogin(userArg, passArg);
+        	if(loginBool) {
+        		logr.info(emp.findById(Main.getUserID()).toString());
+        		return;
+        	}
+                logr.info("Something happened! Go back to the start!" + loginBool);
                 return;
-            }
-            if(!String.valueOf(passArg).equals(employeePassword)){
-                System.out.println(invalidPasswordMessage + "go back to the start!");
-                return;
-            }
         } catch (NoSuchElementException e) {
-            System.out.println("hmm... employee doesn't exist...try again");
+        	logr.error(e.getMessage());
+            System.out.println("hmm... employee doesn't exist...Go back to the start!");
             return;
         }
     }
 
     public void getRegistration() {
         String[] registration = view.getRegistrationForm();
-        ArrayList<Customer> customers = Customer.getCustomers();
-        Stream<Customer> customerStream = customers.stream();
-       	if(customerStream.filter((c)->c.getUsername().equals(registration[0].toString())).findFirst().isPresent()) {
-           	System.out.println(existingMessage);
-           	return;
-       	}
-        register(registration);
-        return;
-    }
-    public void register(String[] arg){
-        Customer newCustomer = new Customer(arg[0].toString(),arg[1].toString());
-        System.out.println(newCustomer.toString());
-        Customer.addCustomer(newCustomer);
+        cust.tryRegister(registration[0], registration[1]);
         return;
     }
     void login(String userArg, String passArg) {
-        try{
-            ArrayList<Customer> customers = Customer.getCustomers();
-            Stream<Customer> customerStream = customers.stream();
-            Customer sessionCustomer = customerStream.filter((c)->c.getUsername().equalsIgnoreCase(userArg)).findFirst().get();
-            String customerPassword = sessionCustomer.getPassword();
-            if (String.valueOf(passArg).equals(customerPassword)){
-                Main.setSession("cust");
-                Main.setUserID(sessionCustomer.getId());
-                return;
-            }
-            if(!String.valueOf(passArg).equals(customerPassword)){
-                System.out.println(invalidPasswordMessage);
-                return;
-            }
-        }catch(NullPointerException e){
-            System.out.println("User doesn't exit.... Try again or Register!");
-            return;
-        }
-        catch(NoSuchElementException e) {
-        	System.out.println("User doesn't exit.... Try again or Register!");
-        	return;
-        }
+    	boolean succeeded = cust.tryLogin(userArg, passArg);
+    	if (succeeded){
+    		logr.info(Main.getCustomer().toString());
+    		return;
+    	}
+    	return;
+	}
+	public void logout() {
+		// TODO Auto-generated method stub
+		logr.info("logged out");
+		Main.setCustomer(null);
+		Main.setAccount(null);
+		Main.setUserID(-1);
+		Main.setAction("login");
+		return;
+	}
     }
-}

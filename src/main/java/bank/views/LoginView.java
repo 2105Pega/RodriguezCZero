@@ -2,10 +2,13 @@ package bank.views;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import diwhy.iHateScanner;
 
 public class LoginView {
+	private static final Logger logr = LogManager.getLogger(LoginView.class);
     String registerKeyword = "register";
     String employeeKeyword = "emp";
     String returnAction[] = new String[2];

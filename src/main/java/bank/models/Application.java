@@ -1,13 +1,16 @@
 package bank.models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 import diwhy.Serializer;
 
 public class Application implements Serializable{
+<<<<<<< Updated upstream
     private static ArrayList<Application> allApplications = new ArrayList<>();
     public static void setAllApplications(ArrayList<Application> allApplications) {
 		Application.allApplications = allApplications;
@@ -19,6 +22,13 @@ public class Application implements Serializable{
     private double intialAmount = 0.00D;
     
     private static final String file = "applications.txt";
+=======
+	private static final long serialVersionUID = 1L;
+	private int id;
+    private BigDecimal intialAmount = new BigDecimal(0);  
+	private char status;
+
+>>>>>>> Stashed changes
     /**
      * p pending
      * a approved
@@ -85,6 +95,16 @@ public class Application implements Serializable{
         Account newAccount = new Account(accountStatus,customers, intialAmount);
         Account.addAccount(newAccount);        
     }
+<<<<<<< Updated upstream
+=======
+
+    public Application(int int1, BigDecimal double1, char s) {
+		this.id = int1;
+		this.intialAmount = double1;
+		this.status = s;
+	}
+    
+>>>>>>> Stashed changes
     public int getId() {
         return id;
     }
@@ -112,6 +132,7 @@ public class Application implements Serializable{
     public void setStatus(char status) {
         this.status = status;
     }
+<<<<<<< Updated upstream
     public static void addApplication(Application appArg){
         allApplications.add(appArg);
         try {
@@ -129,3 +150,13 @@ public class Application implements Serializable{
         return "Application [customers=" + customers + ", id=" + id + ", status=" + status + "]";
     }
 }
+=======
+    public BigDecimal getIntialAmount() {
+		return intialAmount;
+	}
+
+	public void setIntialAmount(BigDecimal intialAmount) {
+		this.intialAmount = intialAmount;
+	}
+}
+>>>>>>> Stashed changes
